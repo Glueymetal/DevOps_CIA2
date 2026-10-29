@@ -1,0 +1,8 @@
+.git/
+.idea/
+.vscode/
+src
+HELP.md
+target/classes
+target/test-classes
+target/*.original
