@@ -11,8 +11,13 @@ public class MyController{
         return "Hello from DevOps Pipeline - v1";
     }
 
-    @GetMapping("api/square")
+    @GetMapping("/api/square")
     public int square(@RequestParam int n){
         return n * n;
+    }
+
+    @GetMapping("/")
+    public String home(){
+        return "CI/CD demo app running on AKS";
     }
 }

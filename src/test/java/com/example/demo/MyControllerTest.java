@@ -30,4 +30,11 @@ class MyControllerTest {
            .andExpect(status().isOk())
            .andExpect(content().string("25"));
     }
+
+    @Test 
+    void homeReturnsMessage() throws Exception {
+        mvc.perform(get("/"))
+        .andExpect(status().isOk())
+        .andExpect(content().string("CI/CD demo app running on AKS"));
+    }
 }
