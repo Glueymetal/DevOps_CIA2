@@ -1,0 +1,25 @@
+# Deploys cicd-demo to AKS: same job as the Jenkins "Deploy to AKS" + "Verify" stages.
+
+- name: Deploy cicd-demo to AKS
+  hosts: local
+  gather_facts: false
+  vars:
+    kubectl_bin: kubectl.exe
+    image: "jeyashreecia2acr.azurecr.io/cicd-demo:{{ image_tag }}"
+
+  tasks:
+    - name: Apply the Deployment with the chosen image tag
+      ansible.builtin.command:
+        cmd: "{{ kubectl_bin }} apply -f -"
+        stdin: "{{ lookup('file', playbook_dir ~ '/../k8s/deployment.yaml') | replace('IMAGE_PLACEHOLDER', image) }}"
+
+    - name: Apply the Service
+      ansible.builtin.command:
+        cmd: "{{ kubectl_bin }} apply -f -"
+        stdin: "{{ lookup('file', playbook_dir ~ '/../k8s/service.yaml') }}"
+
+    - name: Wait for the rollout to finish
+      ansible.builtin.command: "{{ kubectl_bin }} rollout status deployment/cicd-demo --timeout=180s"
+
+    - name: Show pods
+      ansible.builtin.command: "{{ kubectl_bin }} get pods"
