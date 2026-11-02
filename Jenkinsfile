@@ -11,6 +11,16 @@ pipeline {
     stage('Checkout') {
       steps { checkout scm }
     }
+    stage('Secret Scan (Gitleaks)') {
+      steps {
+          bat '"C:\\tools\\gitleaks\\gitleaks.exe" detect --source . --no-git --redact --verbose --report-format json --report-path gitleaks-report.json'
+      }
+      post {
+          always {
+              archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+          }
+      }
+    }
     stage('Build and Test') {
       steps { bat 'mvn -B clean verify' }
       post { always { junit 'target/surefire-reports/*.xml' } }
