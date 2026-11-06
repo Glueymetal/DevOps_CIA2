@@ -16,6 +16,11 @@ public class MyController{
         return n * n;
     }
 
+    @GetMapping("/api/cube")
+    public int cube(@RequestParam int n){
+        return n * n * n;
+    }
+
     @GetMapping("/")
     public String home(){
         return "CI/CD demo app running on AKS";
